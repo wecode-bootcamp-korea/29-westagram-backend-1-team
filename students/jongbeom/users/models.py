@@ -7,6 +7,6 @@ class User(models.Model):
     phone_number = models.CharField(max_length=30, unique=True)
     created_at   = models.DateTimeField(auto_now_add=True)
     updated_at   = models.DateTimeField(auto_now=True)
-    
+  
     class Meta:
-        db_table = 'users'
+        db_table = "users"
