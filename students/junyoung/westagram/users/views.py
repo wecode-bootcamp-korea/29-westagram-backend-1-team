@@ -54,7 +54,7 @@ class SignInView(View):
             elif not User.objects.filter(password = password).exists():
                 return JsonResponse({"message" : "INVALID_PASSWORD"}, status = 401)
         
-            return JsonResponse({"message" : "LOGIN SUCCESS"}, status = 201)
+            return JsonResponse({"message" : "LOGIN SUCCESS"}, status = 200)
         
         except KeyError as e:
             return JsonResponse({"message" : f"KEY_ERROR : ENTER_YOUR_{e.args[0].upper()}"}, status = 400)
