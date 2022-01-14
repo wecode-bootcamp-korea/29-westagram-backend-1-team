@@ -24,16 +24,18 @@ class SignUpView(View):
 
     def post(self, request):
         data = json.loads(request.body)
-        
-        try:
-            if re.match(r"^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", data["email"]) == None:
-                    return JsonResponse({"message" : "Bad Request_Invalid Email Format"}, status=400)
+        REGEX_EMAIL    = r"^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+        REGEX_PASSWORD = r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$"
 
-            if re.match(r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$", data["password"]) == None:
-                    return JsonResponse({"message" : "Bad Request_Invalid Password Format"}, status=400)
+        try:
+            if not re.match(REGEX_EMAIL, data["email"]):
+                    return JsonResponse({"message" : "Bad Request(Invalid Email Format)"}, status=400)
+
+            if not re.match(REGEX_PASSWORD, data["password"]):
+                    return JsonResponse({"message" : "Bad Request(Invalid Password Format)"}, status=400)
 
             if User.objects.filter(email=data["email"]).exists():
-                    return JsonResponse({"message" : "Bad Request_Email Already Exist"}, status=400)
+                    return JsonResponse({"message" : "Bad Request(Email Already Exist)"}, status=400)
 
             user = User(
                 username     = data["username"],
