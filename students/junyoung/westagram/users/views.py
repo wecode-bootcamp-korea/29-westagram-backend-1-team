@@ -13,11 +13,10 @@ class SignUpView(View):
             email              = data['email']
             password           = data['password']
             phone_number       = data['phone_number']
-            REGEX_EMAIL        = r'\w+[@]+\w+[.]+\w+'
-            REGEX_PASSWORD     = r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*\W).{8,}'
+            REGEX_EMAIL        = r'^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+            REGEX_PASSWORD     = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$'
             REGEX_PHONE_NUMBER = r'^(010)\d{8}$'
 
-            
             if not re.match(REGEX_EMAIL, email):
                 return JsonResponse({"message" : "INVALID_EMAIL"}, status = 400)
                     
