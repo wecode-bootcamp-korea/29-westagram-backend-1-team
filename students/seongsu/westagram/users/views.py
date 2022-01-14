@@ -1,10 +1,10 @@
 import json, re
 
-from django.views import View
-from django.http  import JsonResponse, HttpResponse
+from django.views           import View
+from django.http            import JsonResponse, HttpResponse
 from django.core.exceptions import ValidationError 
 
-from .models      import User
+from .models                import User
 
 class SignUpView(View):
     def post(self, request):
@@ -14,7 +14,7 @@ class SignUpView(View):
         try:
             email          = user_data['email']
             password       = user_data['password']
-            
+
             REGEX_EMAIL    = r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+'
             REGEX_PASSWORD = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$'
 
