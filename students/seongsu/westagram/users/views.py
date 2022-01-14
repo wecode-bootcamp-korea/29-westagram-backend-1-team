@@ -14,16 +14,17 @@ class SignUpView(View):
         try:
             email          = user_data['email']
             password       = user_data['password']
-            regex_email    = r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+'
-            regex_password = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$'
+            
+            REGEX_EMAIL    = r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+'
+            REGEX_PASSWORD = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$'
 
             if user_data['name'] == '':
                 return JsonResponse({"message" : "Please type your name"}, status = 400)
             
-            elif not re.fullmatch(regex_email, email):
+            elif not re.fullmatch(REGEX_EMAIL, email):
                 return JsonResponse({"message" : "Please type valid email address"}, status = 400)
 
-            elif not re.fullmatch(regex_password, password):
+            elif not re.fullmatch(REGEX_PASSWORD, password):
                 return JsonResponse({"message" : "must have 1 alphabet, 1 numbers, 1 special character and minimum 8 letter"}, status = 400)
 
             elif User.objects.filter(email = email).exists():
