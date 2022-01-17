@@ -28,17 +28,12 @@ class SignUpView(View):
         REGEX_PASSWORD = r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$"
 
         try:
-            if data["email"] == '' or data["password"] == '':
-                    return JsonResponse({"message": "KEY_ERROR"}, status=400)
-
             if not re.match(REGEX_EMAIL, data["email"]):
-                    return JsonResponse({"message" : "Bad Request(Invalid Email Format)"}, status=400)
-
-            if not re.match(REGEX_PASSWORD, data["password"]):
-                    return JsonResponse({"message" : "Bad Request(Invalid Password Format)"}, status=400)
-
-            if User.objects.filter(email=data["email"]).exists():
-                    return JsonResponse({"message" : "Bad Request(Email Already Exist)"}, status=400)
+                return JsonResponse({"message" : "Bad Request(Invalid Email Format)"}, status=400)
+            elif not re.match(REGEX_PASSWORD, data["password"]):
+                return JsonResponse({"message" : "Bad Request(Invalid Password Format)"}, status=400)
+            elif User.objects.filter(email=data["email"]).exists():
+                return JsonResponse({"message" : "Bad Request(Email Already Exist)"}, status=400)
 
             user = User(
                 username     = data["username"],
@@ -56,18 +51,13 @@ class LogInView(View):
         data = json.loads(request.body)
 
         try:              
-            if data["email"] == '' or data["password"] == '':     
-                return JsonResponse({"message" : "KEY_ERROR"}, status=400)
-            elif not User.objects.filter(email=data["email"]).exists():
-                return JsonResponse({"message" : "INVALID_USER"}, status=401)
-            elif not User.objects.filter(password=data["password"]).exists():
-                return JsonResponse({"message" : "INVALID_USER"}, status=401)
+            if not User.objects.filter(email=data["email"]).exists():
+                return JsonResponse({"message" : "INVALID_EMAIL"}, status=401)
             elif User.objects.filter(email=data["email"], password=data["password"]).exists():
                 return JsonResponse({"message" : "SUCCESS"}, status=200)
-            else:
-                return JsonResponse({"message" : "INVALID_USER"}, status=401)
+            return JsonResponse({"message" : "INVALID_PASSWORD"}, status=401)
         except KeyError:
-            return JsonResponse({"message" : "KeyError"}, status=400)
+            return JsonResponse({"message" : "KEY_ERROR"}, status=400)
 
 
 
