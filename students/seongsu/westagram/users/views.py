@@ -1,4 +1,4 @@
-import json, re, bcrypt
+import json, re, bcrypt, jwt
 
 from django.views           import View
 from django.http            import JsonResponse, HttpResponse
@@ -54,11 +54,13 @@ class SignInView(View):
             email    = user_data['email']
             password = user_data['password']
             user = User.objects.get(email = email)
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
             
-            if user.password != password:
+            if bcrypt.checkpw(password.encode('utf-8'), hashed_password) == False:
                 return JsonResponse({"message" : "wrong password"}, status = 400)
 
-            return JsonResponse({"message" : "LOGIN SUCCESS"}, status = 201)
+            access_token = jwt.encode({'id' : user.id}, user.password, algorithm = 'HS256')
+            return JsonResponse({"message" : "LOGIN SUCCESS! JWT: " + access_token}, status = 201)
         
         except KeyError as e:
             return JsonResponse({"message" : "KEY_ERROR: " + str(e).replace("'", '')}, status = 400)
