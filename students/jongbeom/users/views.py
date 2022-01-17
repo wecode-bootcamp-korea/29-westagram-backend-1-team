@@ -42,7 +42,7 @@ class SignUpView(View):
                 phone_number = data["phone_number"],
             )
             user.save()
-            return JsonResponse({"message" : "SUCCESS"}, status=201)
+            return JsonResponse({" message" : "SUCCESS"}, status=201)
         except KeyError: 
             return JsonResponse({"message" : "KeyError"}, status=400)
 
@@ -53,14 +53,8 @@ class LogInView(View):
         password = data["password"]
 
         try:              
-            if not User.objects.filter(email=email).exists():
-                return JsonResponse({"message" : "INVALID_EMAIL"}, status=401)
-            elif User.objects.filter(email=email, password=password).exists():
+            if User.objects.filter(email=email, password=password).exists():
                 return JsonResponse({"message" : "SUCCESS"}, status=200)
-            return JsonResponse({"message" : "INVALID_PASSWORD"}, status=401)
+            return JsonResponse({"message" : "INVALID_USER"}, status=401)
         except KeyError:
             return JsonResponse({"message" : "KEY_ERROR"}, status=400)
-
-
-
-
