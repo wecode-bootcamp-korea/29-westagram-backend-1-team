@@ -1,3 +1,4 @@
+import email
 import json, re, bcrypt, jwt
 
 from django.views import View
@@ -43,14 +44,15 @@ class SignUpView(View):
 class SignInView(View):
     def post(self,request):
         try:
-            data       = json.loads(request.body)       
+            data       = json.loads(request.body)
+            email      = data['email']       
             password   = data['password']
-            user       = User.objects.get(email = data["email"])
+            user       = User.objects.get(email = email)
 
             if not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
                 return JsonResponse({"message" : "INVALID_PASSWORD"}, status = 401)
             
-            access_token = jwt.encode({'user_id' : user.id}, password, algorithm = 'HS256')
+            access_token = jwt.encode({'user_id' : user.id}, user.password, algorithm = 'HS256')
             
             return JsonResponse({"message" : f"LOGIN SUCCESS , JWT :{access_token}"}, status = 201)
 
