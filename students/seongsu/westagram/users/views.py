@@ -1,4 +1,4 @@
-import json, re
+import json, re, bcrypt
 
 from django.views           import View
 from django.http            import JsonResponse, HttpResponse
@@ -12,13 +12,16 @@ class SignUpView(View):
         user_data = json.loads(request.body)
 
         try:
-            email          = user_data['email']
-            password       = user_data['password']
-
+            name            = user_data["name"]
+            email           = user_data['email']
+            password        = user_data['password']
+            phone_number    = user_data["phone_number"]
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            
             REGEX_EMAIL    = r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+'
             REGEX_PASSWORD = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$'
 
-            if user_data['name'] == '':
+            if name == '':
                 return JsonResponse({"message" : "Please type your name"}, status = 400)
             
             elif not re.fullmatch(REGEX_EMAIL, email):
@@ -32,10 +35,10 @@ class SignUpView(View):
 
             else:
                 user = User.objects.create(
-                    name         = user_data["name"],
+                    name         = name,
                     email        = email,
-                    password     = password,
-                    phone_number = user_data["phone_number"]
+                    password     = hashed_password,
+                    phone_number = phone_number
                 )
                 return JsonResponse({"message" : "SUCCESS"}, status = 201)
         
