@@ -1,4 +1,4 @@
-import json,re, bcrypt
+import json, re, bcrypt
 
 from django.views import View
 from django.http  import JsonResponse
@@ -37,7 +37,7 @@ class SignUpView(View):
                 return JsonResponse({"message" : "Bad Request(Invalid Email Format)"}, status=400)
             elif not re.match(REGEX_PASSWORD, password):
                 return JsonResponse({"message" : "Bad Request(Invalid Password Format)"}, status=400)
-            elif User.objects.filter(email=email).exists():
+            elif User.objects.filter(email = email).exists():
                 return JsonResponse({"message" : "Bad Request(Email Already Exist)"}, status=400)
 
             user = User(
@@ -59,7 +59,7 @@ class LogInView(View):
             email    = data["email"]
             password = data["password"]   
 
-            if User.objects.filter(email=email, password=password).exists():
+            if User.objects.filter(email = email, password = password).exists():
                 return JsonResponse({"message" : "SUCCESS"}, status=200)
             return JsonResponse({"message" : "INVALID_USER"}, status=401)
         except KeyError:
