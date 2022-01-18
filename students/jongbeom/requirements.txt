@@ -1,7 +1,13 @@
-# requirements.txt
-Django==3.2.4
-django-cors-headers==3.7.0
-mysqlclient==2.0.3
-    
-# m1의 경우 아래 패키지도 추가해주세요.
+asgiref==3.4.1
+bcrypt==3.2.0
+certifi==2021.5.30
+cffi==1.15.0
+cryptography==36.0.1
+Django==4.0.1
+django-cors-headers==3.11.0
+mysqlclient==2.1.0
+pycparser==2.21
+PyJWT==2.3.0
 PyMySQL==1.0.2
+six==1.16.0
+sqlparse==0.4.2
